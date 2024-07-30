@@ -6,14 +6,16 @@ function App() {
   const [stockSymbol, setStockSymbol] = useState('')
   const [quantity, setQuantity] = useState('')
   const [purchasePrice, setPurchasePrice] = useState('')
+  const [stocks, setStocks] = useState([])
 
   const handleSubmit = async (event) => {
+    console.log('Handle submit ran')
     event.preventDefault()
-    const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${stockSymbol}&apikey=${
-      import.meta.env.API_KEY
-    }`
+    // const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${stockSymbol}&apikey=${
+    //   import.meta.env.API_KEY
+    // }`
     const demoUrl = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=IBM&apikey=${
-      import.meta.env.API_KEY_DEMO
+      import.meta.env.VITE_API_KEY_DEMO
     }`
     // Make API call with the stockSymbol
     let jsonResponse = null
@@ -22,6 +24,7 @@ function App() {
       jsonResponse = await response.json()
     } catch (error) {
       console.log(error.message)
+      return
     }
     // Extract out current price from API response
     const lastRefreshed = jsonResponse['Meta Data']['3. Last Refreshed']
@@ -30,11 +33,21 @@ function App() {
     )
     // Calculate Profit/Loss
     const profitLoss = currentPrice * quantity - purchasePrice * quantity
-    console.log(profitLoss)
+    // Store state of this stock's info into stocks
+    const newStock = {
+      stockSymbol,
+      quantity,
+      purchasePrice,
+      profitLoss,
+      currentPrice,
+    }
+    setStocks(stocks.concat(newStock))
+    console.log(stocks)
   }
 
   return (
     <div>
+      {console.log('Rendered')}
       <StockForm
         handleSubmit={handleSubmit}
         stockSymbol={stockSymbol}
@@ -44,6 +57,7 @@ function App() {
         setQuantity={setQuantity}
         setPurchasePrice={setPurchasePrice}
       />
+      {console.log(stocks)}
     </div>
   )
 }
@@ -71,14 +85,14 @@ const StockForm = (props) => {
       <input
         name='quantity'
         value={quantity}
-        type='text'
+        type='number'
         onChange={(event) => setQuantity(event.target.value)}
         placeholder='Quantity'
       />
       <input
         name='purchasePrice'
         value={purchasePrice}
-        type='text'
+        type='number'
         onChange={(event) => setPurchasePrice(event.target.value)}
         placeholder='Purchase Price'
       />
