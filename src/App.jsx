@@ -7,14 +7,30 @@ function App() {
   const [quantity, setQuantity] = useState('')
   const [purchasePrice, setPurchasePrice] = useState('')
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
-    console.log(stockSymbol)
-    console.log(quantity)
-    console.log(purchasePrice)
+    const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${stockSymbol}&apikey=${
+      import.meta.env.API_KEY
+    }`
+    const demoUrl = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=IBM&apikey=${
+      import.meta.env.API_KEY_DEMO
+    }`
     // Make API call with the stockSymbol
+    let jsonResponse = null
+    try {
+      const response = await fetch(demoUrl)
+      jsonResponse = await response.json()
+    } catch (error) {
+      console.log(error.message)
+    }
     // Extract out current price from API response
+    const lastRefreshed = jsonResponse['Meta Data']['3. Last Refreshed']
+    const currentPrice = parseFloat(
+      jsonResponse['Time Series (Daily)'][lastRefreshed]['4. close']
+    )
     // Calculate Profit/Loss
+    const profitLoss = currentPrice * quantity - purchasePrice * quantity
+    console.log(profitLoss)
   }
 
   return (
@@ -50,18 +66,21 @@ const StockForm = (props) => {
         value={stockSymbol}
         type='text'
         onChange={(event) => setStockSymbol(event.target.value)}
+        placeholder='Stock Symbol'
       />
       <input
         name='quantity'
         value={quantity}
         type='text'
         onChange={(event) => setQuantity(event.target.value)}
+        placeholder='Quantity'
       />
       <input
         name='purchasePrice'
         value={purchasePrice}
         type='text'
         onChange={(event) => setPurchasePrice(event.target.value)}
+        placeholder='Purchase Price'
       />
       <button type='submit'>Add Stock</button>
     </form>
