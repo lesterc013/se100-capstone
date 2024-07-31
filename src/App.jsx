@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import StockForm from './components/StockForm'
 import StockList from './components/StockList'
 import './App.css'
@@ -9,25 +9,38 @@ function App() {
   const [purchasePrice, setPurchasePrice] = useState('')
   const [stocks, setStocks] = useState([])
 
-  const handleSubmit = async event => {
-    console.log('Handle submit ran')
-    event.preventDefault()
-    // Actual url
-    // const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${stockSymbol}&apikey=${
-    //   import.meta.env.API_KEY
-    // }`
-    const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${stockSymbol}&apikey=${
-      import.meta.env.VITE_API_KEY_DEMO
-    }`
-    // Make API call with the stockSymbol
-    let jsonResponse = null
+  // useCallback with empty array - means it will only be created on first render and then memoized to prevent recreation when component re-renders -- optimization
+  const callApi = useCallback(async url => {
     try {
       const response = await fetch(url)
-      jsonResponse = await response.json()
+      const jsonResponse = await response.json()
+      return jsonResponse
     } catch (error) {
       console.log(error.message)
       return
     }
+  }, [])
+
+  const handleSubmit = async event => {
+    console.log('Handle submit ran')
+    event.preventDefault()
+    // Actual url
+    const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${stockSymbol}&apikey=${
+      import.meta.env.API_KEY
+    }`
+    // const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${stockSymbol}&apikey=${
+    //   import.meta.env.VITE_API_KEY_DEMO
+    // }`
+    // Make API call with the stockSymbol
+    const jsonResponse = await callApi(url)
+    console.log(jsonResponse)
+    // try {
+    //   const response = await fetch(url)
+    //   jsonResponse = await response.json()
+    // } catch (error) {
+    //   console.log(error.message)
+    //   return
+    // }
     // Extract out current price from API response
     const lastRefreshed = jsonResponse['Meta Data']['3. Last Refreshed']
     const currentPrice = parseFloat(
