@@ -7,8 +7,9 @@ function AppTest() {
   const [stockSymbol, setStockSymbol] = useState('')
   const [quantity, setQuantity] = useState('')
   const [purchasePrice, setPurchasePrice] = useState('')
-  const [stockSymbolList, setStockSymbolList] = useState([])
-  const [stockList, setStockList] = useState([])
+  const [stockSymbolList, setStockSymbolList] = useState([]) // For triggering useEffect
+  const [currentPrice, setCurrentPrice] = useState([]) // For tracking a specific stock's currentPrice
+  const [stockList, setStockList] = useState([]) // To track each record entered by a user
 
   // useCallback with empty array - means it will only be created on first render and then memoized to prevent recreation when component re-renders -- optimization
   const getCurrentPrice = useCallback(async stockSymbol => {
@@ -26,30 +27,37 @@ function AppTest() {
     }
   }, [])
 
-  // Everytime a new symbol is added to stockSymbolList i.e. stockSymbolList changes, useEffect triggers - which will loop through all the stock symbols, and make API call to get its latest price. All the latest prices are updated in stockList state variable
+  // Everytime a new symbol is added to stockSymbolList i.e. stockSymbolList changes, useEffect triggers - which will loop through all the stock symbols, and make API call to get its latest price. All the latest prices are updated in currentPrice state variable
   useEffect(() => {
-    const updateStockList = async () => {
-      const updatedStockList = []
+    const updateCurrentPrice = async () => {
+      const updatedCurrentPrice = []
       for (const symbol of stockSymbolList) {
         const currentPrice = await getCurrentPrice(symbol)
         const newStock = {
           symbol,
           currentPrice,
         }
-        updatedStockList.push(newStock)
+        updatedCurrentPrice.push(newStock)
       }
-      setStockList(updatedStockList)
+      setCurrentPrice(updatedCurrentPrice)
     }
-    updateStockList()
+    updateCurrentPrice()
   }, [stockSymbolList, getCurrentPrice])
 
   const handleSubmit = async event => {
     event.preventDefault()
+    !stockSymbolList.includes(stockSymbol) &&
+      setStockSymbolList(stockSymbolList.concat(stockSymbol))
+    setStockList(
+      stockList.concat({
+        stockSymbol,
+        quantity,
+        purchasePrice,
+      })
+    )
     setStockSymbol('')
     setQuantity('')
     setPurchasePrice('')
-    !stockSymbolList.includes(stockSymbol) &&
-      setStockSymbolList(stockList.concat(stockSymbol))
   }
 
   return (
@@ -65,7 +73,21 @@ function AppTest() {
         setPurchasePrice={setPurchasePrice}
       />
       <h2>Stock List</h2>
-      {console.log(stockList)}
+      {/* {console.log(currentPrice)}
+      {currentPrice.length === 0 || stockList.length === 0 ? (
+        <div>No stocks added</div>
+      ) : (
+        stockList.map(stock => (
+          <StockList
+            key={stock.stockSymbol}
+            stockRecord={stock}
+            currentPrice={
+              currentPrice.find(obj => obj.symbol === stock.stockSymbol)
+                .currentPrice
+            }
+          />
+        ))
+      )} */}
     </div>
   )
 }
