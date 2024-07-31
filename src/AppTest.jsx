@@ -7,9 +7,8 @@ function AppTest() {
   const [stockSymbol, setStockSymbol] = useState('')
   const [quantity, setQuantity] = useState('')
   const [purchasePrice, setPurchasePrice] = useState('')
-  const [stockSymbolList, setStockSymbolList] = useState([]) // For triggering useEffect
-  const [currentPrice, setCurrentPrice] = useState([]) // For tracking a specific stock's currentPrice
   const [stockList, setStockList] = useState([]) // To track each record entered by a user
+  const [stockSymbolList, setStockSymbolList] = useState([]) // For triggering useEffect
 
   // useCallback with empty array - means it will only be created on first render and then memoized to prevent recreation when component re-renders -- optimization
   const getCurrentPrice = useCallback(async stockSymbol => {
@@ -27,19 +26,18 @@ function AppTest() {
     }
   }, [])
 
-  // Everytime a new symbol is added to stockSymbolList i.e. stockSymbolList changes, useEffect triggers - which will loop through all the stock symbols, and make API call to get its latest price. All the latest prices are updated in currentPrice state variable
+  // Biggest hurdle - cannot set as dependency something that you intend to change state within useEffect. Will cause infinite loop
   useEffect(() => {
+    console.log('useEffect run')
     const updateCurrentPrice = async () => {
-      const updatedCurrentPrice = []
       for (const symbol of stockSymbolList) {
         const currentPrice = await getCurrentPrice(symbol)
-        const newStock = {
-          symbol,
-          currentPrice,
-        }
-        updatedCurrentPrice.push(newStock)
+        setStockList(prevList =>
+          prevList.map(record =>
+            record.stockSymbol === symbol ? { ...record, currentPrice } : record
+          )
+        )
       }
-      setCurrentPrice(updatedCurrentPrice)
     }
     updateCurrentPrice()
   }, [stockSymbolList, getCurrentPrice])
@@ -48,11 +46,14 @@ function AppTest() {
     event.preventDefault()
     !stockSymbolList.includes(stockSymbol) &&
       setStockSymbolList(stockSymbolList.concat(stockSymbol))
+    // const currentPrice = await getCurrentPrice(stockSymbol)
     setStockList(
       stockList.concat({
+        id: stockList.length,
         stockSymbol,
         quantity,
         purchasePrice,
+        currentPrice: null,
       })
     )
     setStockSymbol('')
@@ -73,21 +74,15 @@ function AppTest() {
         setPurchasePrice={setPurchasePrice}
       />
       <h2>Stock List</h2>
-      {/* {console.log(currentPrice)}
-      {currentPrice.length === 0 || stockList.length === 0 ? (
+      {/* {console.log(stockList)} */}
+      {/* {console.log(currentPrice)} */}
+      {stockList.length === 0 ? (
         <div>No stocks added</div>
       ) : (
         stockList.map(stock => (
-          <StockList
-            key={stock.stockSymbol}
-            stockRecord={stock}
-            currentPrice={
-              currentPrice.find(obj => obj.symbol === stock.stockSymbol)
-                .currentPrice
-            }
-          />
+          <StockList key={stock.stockSymbol} stockRecord={stock} />
         ))
-      )} */}
+      )}
     </div>
   )
 }
