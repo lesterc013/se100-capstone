@@ -25,27 +25,17 @@ function App() {
     console.log('Handle submit ran')
     event.preventDefault()
     // Actual url
-    const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${stockSymbol}&apikey=${
-      import.meta.env.API_KEY
-    }`
-    // const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${stockSymbol}&apikey=${
-    //   import.meta.env.VITE_API_KEY_DEMO
+    // const url = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${stockSymbol}&apikey=${
+    //   import.meta.env.API_KEY
     // }`
+    const url = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${stockSymbol}&apikey=${
+      import.meta.env.VITE_API_KEY_DEMO
+    }`
     // Make API call with the stockSymbol
     const jsonResponse = await callApi(url)
     console.log(jsonResponse)
-    // try {
-    //   const response = await fetch(url)
-    //   jsonResponse = await response.json()
-    // } catch (error) {
-    //   console.log(error.message)
-    //   return
-    // }
     // Extract out current price from API response
-    const lastRefreshed = jsonResponse['Meta Data']['3. Last Refreshed']
-    const currentPrice = parseFloat(
-      jsonResponse['Time Series (Daily)'][lastRefreshed]['4. close']
-    )
+    const currentPrice = parseFloat(jsonResponse['Global Quote']['05. price'])
     // Calculate Profit/Loss
     const profitLoss = currentPrice * quantity - purchasePrice * quantity
     // Store state of this stock's info into stocks
