@@ -1,52 +1,61 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import StockForm from './components/StockForm'
 import StockList from './components/StockList'
 import './App.css'
 
-function App() {
+function AppTest() {
   const [stockSymbol, setStockSymbol] = useState('')
   const [quantity, setQuantity] = useState('')
   const [purchasePrice, setPurchasePrice] = useState('')
-  const [stocks, setStocks] = useState([])
+  const [stockList, setStockList] = useState([]) // To track each record entered by a user
+  const [stockSymbolList, setStockSymbolList] = useState([]) // For triggering useEffect
 
   // useCallback with empty array - means it will only be created on first render and then memoized to prevent recreation when component re-renders -- optimization
-  const callApi = useCallback(async url => {
+  const getCurrentPrice = useCallback(async stockSymbol => {
     try {
+      const url = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${stockSymbol}&apikey=${
+        import.meta.env.VITE_API_KEY_DEMO
+      }`
       const response = await fetch(url)
       const jsonResponse = await response.json()
-      return jsonResponse
+      const currentPrice = jsonResponse['Global Quote']['05. price']
+      return currentPrice
     } catch (error) {
       console.log(error.message)
       return
     }
   }, [])
 
-  const handleSubmit = async event => {
-    console.log('Handle submit ran')
-    event.preventDefault()
-    // Actual url
-    // const url = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${stockSymbol}&apikey=${
-    //   import.meta.env.API_KEY
-    // }`
-    const url = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${stockSymbol}&apikey=${
-      import.meta.env.VITE_API_KEY_DEMO
-    }`
-    // Make API call with the stockSymbol
-    const jsonResponse = await callApi(url)
-    console.log(jsonResponse)
-    // Extract out current price from API response
-    const currentPrice = parseFloat(jsonResponse['Global Quote']['05. price'])
-    // Calculate Profit/Loss
-    const profitLoss = currentPrice * quantity - purchasePrice * quantity
-    // Store state of this stock's info into stocks
-    const newStock = {
-      stockSymbol,
-      quantity,
-      purchasePrice,
-      profitLoss,
-      currentPrice,
+  // Biggest hurdle - cannot set as dependency something that you intend to change state within useEffect. Will cause infinite loop. This was because I tried to setStockList while using stockList as a dependency. What solved the issue was to have a stockSymbolList to track someone adding stocks, and then using that to trigger useEffect to setStockList
+  useEffect(() => {
+    console.log('useEffect run')
+    const updateCurrentPrice = async () => {
+      for (const symbol of stockSymbolList) {
+        const currentPrice = await getCurrentPrice(symbol)
+        setStockList(prevList =>
+          prevList.map(record =>
+            record.stockSymbol === symbol ? { ...record, currentPrice } : record
+          )
+        )
+      }
     }
-    setStocks(stocks.concat(newStock))
+    updateCurrentPrice()
+  }, [stockSymbolList, getCurrentPrice])
+
+  const handleSubmit = async event => {
+    event.preventDefault()
+    !stockSymbolList.includes(stockSymbol) &&
+      setStockSymbolList(stockSymbolList.concat(stockSymbol))
+    // const currentPrice = await getCurrentPrice(stockSymbol)
+    setStockList(
+      stockList.concat({
+        id: stockList.length,
+        stockSymbol,
+        quantity,
+        purchasePrice,
+        currentPrice: null,
+      })
+    )
     setStockSymbol('')
     setQuantity('')
     setPurchasePrice('')
@@ -65,13 +74,17 @@ function App() {
         setPurchasePrice={setPurchasePrice}
       />
       <h2>Stock List</h2>
-      {stocks.length === 0 ? (
-        <div>No stocks added yet</div>
+      {/* {console.log(stockList)} */}
+      {/* {console.log(currentPrice)} */}
+      {stockList.length === 0 ? (
+        <div>No stocks added</div>
       ) : (
-        stocks.map(stock => <StockList key={stock.stockSymbol} stock={stock} />)
+        stockList.map(stock => (
+          <StockList key={stock.stockSymbol} stockRecord={stock} />
+        ))
       )}
     </div>
   )
 }
 
-export default App
+export default AppTest
