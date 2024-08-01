@@ -84,7 +84,7 @@ function AppTest() {
       {stockList.length === 0 ? (
         <div>No stocks added</div>
       ) : (
-        stockList.map(stock => <StockList key={stock.id} stockRecord={stock} />)
+        <StockList stockList={stockList} />
       )}
     </div>
   )
