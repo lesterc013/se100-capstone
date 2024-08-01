@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import StockForm from './components/StockForm'
 import StockList from './components/StockList'
+import { StockListContext } from './components/StockListContext'
 import './App.css'
 
 function AppTest() {
@@ -84,7 +85,9 @@ function AppTest() {
       {stockList.length === 0 ? (
         <div>No stocks added</div>
       ) : (
-        <StockList stockList={stockList} />
+        <StockListContext.Provider value={stockList}>
+          <StockList />
+        </StockListContext.Provider>
       )}
     </div>
   )
