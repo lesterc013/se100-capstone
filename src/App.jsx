@@ -10,7 +10,7 @@ function AppTest() {
   const [stockList, setStockList] = useState([]) // To track each record entered by a user
   const [stockSymbolList, setStockSymbolList] = useState([]) // For triggering useEffect
 
-  // useCallback with empty array - means it will only be created on first render and then memoized to prevent recreation when component re-renders -- optimization
+  // API call: useCallback with empty array - means it will only be created on first render and then memoized to prevent recreation when component re-renders -- optimization
   const getCurrentPrice = useCallback(async stockSymbol => {
     try {
       const url = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${stockSymbol}&apikey=${
@@ -26,7 +26,8 @@ function AppTest() {
     }
   }, [])
 
-  // Biggest hurdle - cannot set as dependency something that you intend to change state within useEffect. Will cause infinite loop. This was because I tried to setStockList while using stockList as a dependency. What solved the issue was to have a stockSymbolList to track someone adding stocks, and then using that to trigger useEffect to setStockList
+  // useEffect: Biggest hurdle - cannot set as dependency something that you intend to change state within useEffect. Will cause infinite loop. This was because I tried to setStockList while using stockList as a dependency. What solved the issue was to have a stockSymbolList to track someone adding new stocks, and then using that to trigger useEffect to setStockList.
+  // BUT this also presented a case where if i add an existing stock, then useEffect wont run cos we wont add this existing symbol to stockSymbolList. Hence, the fix is to track the stockList.length where if it changes i.e. someone added a stock, useEffect will run
   useEffect(() => {
     console.log('useEffect run')
     const updateCurrentPrice = async () => {
@@ -40,11 +41,13 @@ function AppTest() {
       }
     }
     updateCurrentPrice()
-  }, [stockSymbolList, getCurrentPrice])
+  }, [stockList.length, stockSymbolList, getCurrentPrice])
 
+  // handleSubmit event handler
   const handleSubmit = async event => {
     event.preventDefault()
     const currentPrice = await getCurrentPrice(stockSymbol)
+    // To handle invalid stock symbol; currentPrice = undefined when invalid
     if (!currentPrice) {
       console.log('Invalid symbol')
     } else {
@@ -81,9 +84,7 @@ function AppTest() {
       {stockList.length === 0 ? (
         <div>No stocks added</div>
       ) : (
-        stockList.map(stock => (
-          <StockList key={stock.stockSymbol} stockRecord={stock} />
-        ))
+        stockList.map(stock => <StockList key={stock.id} stockRecord={stock} />)
       )}
     </div>
   )
