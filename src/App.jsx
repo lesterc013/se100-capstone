@@ -44,18 +44,22 @@ function AppTest() {
 
   const handleSubmit = async event => {
     event.preventDefault()
-    !stockSymbolList.includes(stockSymbol) &&
-      setStockSymbolList(stockSymbolList.concat(stockSymbol))
-    // const currentPrice = await getCurrentPrice(stockSymbol)
-    setStockList(
-      stockList.concat({
-        id: stockList.length,
-        stockSymbol,
-        quantity,
-        purchasePrice,
-        currentPrice: null,
-      })
-    )
+    const currentPrice = await getCurrentPrice(stockSymbol)
+    if (!currentPrice) {
+      console.log('Invalid symbol')
+    } else {
+      !stockSymbolList.includes(stockSymbol) &&
+        setStockSymbolList(stockSymbolList.concat(stockSymbol))
+      setStockList(
+        stockList.concat({
+          id: stockList.length,
+          stockSymbol,
+          quantity,
+          purchasePrice,
+          currentPrice,
+        })
+      )
+    }
     setStockSymbol('')
     setQuantity('')
     setPurchasePrice('')
@@ -74,8 +78,6 @@ function AppTest() {
         setPurchasePrice={setPurchasePrice}
       />
       <h2>Stock List</h2>
-      {/* {console.log(stockList)} */}
-      {/* {console.log(currentPrice)} */}
       {stockList.length === 0 ? (
         <div>No stocks added</div>
       ) : (
