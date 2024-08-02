@@ -9,7 +9,7 @@ const Stock = ({ stockRecord }) => {
       <div>Quantity: {quantity}</div>
       <div>Purchase Price: {purchasePrice}</div>
       <div>Current Price: {currentPrice}</div>
-      <div>Profit/Loss: {profitLoss}</div>
+      <div>Profit/Loss: {profitLoss.toFixed(2)}</div>
     </div>
   )
 }
