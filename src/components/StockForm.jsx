@@ -1,4 +1,4 @@
-const StockForm = (props) => {
+const StockForm = props => {
   const {
     handleSubmit,
     stockSymbol,
@@ -15,24 +15,26 @@ const StockForm = (props) => {
         name='stockSymbol'
         value={stockSymbol}
         type='text'
-        onChange={(event) => setStockSymbol(event.target.value.toUpperCase())}
+        onChange={event => setStockSymbol(event.target.value.toUpperCase())}
         placeholder='Stock Symbol'
       />
       <input
         name='quantity'
         value={quantity}
         type='number'
-        onChange={(event) => setQuantity(event.target.value)}
+        onChange={event => setQuantity(event.target.value)}
         placeholder='Quantity'
       />
       <input
         name='purchasePrice'
         value={purchasePrice}
         type='number'
-        onChange={(event) => setPurchasePrice(event.target.value)}
+        onChange={event => setPurchasePrice(event.target.value)}
         placeholder='Purchase Price'
       />
-      <button type='submit'>Add Stock</button>
+      <button className='bg-sky-500 hover:bg-sky-700' type='submit'>
+        Add Stock
+      </button>
     </form>
   )
 }
