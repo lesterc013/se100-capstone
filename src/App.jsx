@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from 'react'
 import StockForm from './components/StockForm'
 import StockList from './components/StockList'
 import { StockListContext } from './components/StockListContext'
-import './App.css'
 
 function AppTest() {
   const [stockSymbol, setStockSymbol] = useState('')
