@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import StockForm from './components/StockForm'
 import StockList from './components/StockList'
 import { StockListContext } from './components/StockListContext'
+import MainTitle from './components/MainTitle'
 
 function AppTest() {
   const [stockSymbol, setStockSymbol] = useState('')
@@ -69,25 +70,27 @@ function AppTest() {
   }
 
   return (
-    <div>
-      <h1>Finance Dashboard</h1>
-      <StockForm
-        handleSubmit={handleSubmit}
-        stockSymbol={stockSymbol}
-        quantity={quantity}
-        purchasePrice={purchasePrice}
-        setStockSymbol={setStockSymbol}
-        setQuantity={setQuantity}
-        setPurchasePrice={setPurchasePrice}
-      />
-      <h2>Stock List</h2>
-      {stockList.length === 0 ? (
-        <div>No stocks added</div>
-      ) : (
-        <StockListContext.Provider value={stockList}>
-          <StockList />
-        </StockListContext.Provider>
-      )}
+    <div className='h-screen'>
+      <div className='flex flex-col mt-28 h-3/6 items-center justify-evenly lg:h-96 lg:mt-28 lg:justify-around lg:items-center'>
+        <MainTitle />
+        <StockForm
+          handleSubmit={handleSubmit}
+          stockSymbol={stockSymbol}
+          quantity={quantity}
+          purchasePrice={purchasePrice}
+          setStockSymbol={setStockSymbol}
+          setQuantity={setQuantity}
+          setPurchasePrice={setPurchasePrice}
+        />
+        <h2>Stock List</h2>
+        {stockList.length === 0 ? (
+          <div>No stocks added</div>
+        ) : (
+          <StockListContext.Provider value={stockList}>
+            <StockList />
+          </StockListContext.Provider>
+        )}
+      </div>
     </div>
   )
 }

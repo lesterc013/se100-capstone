@@ -11,7 +11,7 @@ const StockForm = props => {
 
   return (
     <form
-      className='flex flex-col items-center lg:flex-row lg:justify-center'
+      className='flex flex-col items-center lg:w-full lg:flex-row lg:content-between lg:justify-center'
       onSubmit={handleSubmit}
     >
       <div className='relative flex justify-center w-8/12 h-10 my-4 max-w-64'>
