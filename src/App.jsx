@@ -3,6 +3,7 @@ import StockForm from './components/StockForm'
 import StockList from './components/StockList'
 import { StockListContext } from './components/StockListContext'
 import MainTitle from './components/MainTitle'
+import SubTitle from './components/SubTitle'
 
 function AppTest() {
   const [stockSymbol, setStockSymbol] = useState('')
@@ -71,7 +72,7 @@ function AppTest() {
 
   return (
     <div className='h-screen'>
-      <div className='flex flex-col mt-28 h-3/6 items-center justify-evenly lg:h-96 lg:mt-28 lg:justify-around lg:items-center'>
+      <div className='flex flex-col mt-28 h-fit justify-start lg:items-start'>
         <MainTitle />
         <StockForm
           handleSubmit={handleSubmit}
@@ -82,9 +83,11 @@ function AppTest() {
           setQuantity={setQuantity}
           setPurchasePrice={setPurchasePrice}
         />
-        <h2>Stock List</h2>
+        <SubTitle />
         {stockList.length === 0 ? (
-          <div>No stocks added</div>
+          <div className='flex flex-col items-center lg:w-full lg:justify-center'>
+            <p className='lg:min-w-48 lg:w-3/4'>No stocks added</p>
+          </div>
         ) : (
           <StockListContext.Provider value={stockList}>
             <StockList />

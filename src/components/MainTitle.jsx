@@ -1,7 +1,9 @@
 const MainTitle = () => {
   return (
-    <div>
-      <h1>Your Financial Overview</h1>
+    <div className='flex w-full justify-center'>
+      <div className='flex justify-center lg:w-3/4 lg:justify-start'>
+        <h1>Your Financial Overview</h1>
+      </div>
     </div>
   )
 }
