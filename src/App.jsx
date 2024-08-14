@@ -5,7 +5,7 @@ import { StockListContext } from './components/StockListContext'
 import MainTitle from './components/MainTitle'
 import SubTitle from './components/SubTitle'
 
-function AppTest() {
+function App() {
   const [stockSymbol, setStockSymbol] = useState('')
   const [quantity, setQuantity] = useState('')
   const [purchasePrice, setPurchasePrice] = useState('')
@@ -112,4 +112,4 @@ function AppTest() {
   )
 }
 
-export default AppTest
+export default App
