@@ -1,8 +1,9 @@
-# React + Vite
+# SE100 CAPSTONE PROJECT
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## BUILD A FINANCE TRACKING DASHBOARD
 
-Currently, two official plugins are available:
+### Key Learning Points
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Solidifed frontend principles of using React, HTML and CSS
+- Learnt to integrate API using useEffect
+- Delved into Tailwind CSS to build customizable UIs - especially in the responsiveness, dark mode, and different states e.g. hover and active etc
