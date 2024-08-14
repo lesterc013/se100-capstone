@@ -1,7 +1,7 @@
 const Stock = ({ stockRecord }) => {
-  const purchasePrice = stockRecord.purchasePrice
-  const quantity = stockRecord.quantity
-  const currentPrice = stockRecord.currentPrice
+  const purchasePrice = parseFloat(stockRecord.purchasePrice)
+  const quantity = parseInt(stockRecord.quantity)
+  const currentPrice = parseFloat(stockRecord.currentPrice)
   const profitLoss = currentPrice * quantity - purchasePrice * quantity
   return (
     <div className='flex flex-col items-center lg:w-full lg:justify-center mt-4 font-rubik dark:text-neutral-300'>
@@ -10,7 +10,10 @@ const Stock = ({ stockRecord }) => {
       </div>
       <div className='min-w-48 lg:w-3/4'>Quantity: {quantity}</div>
       <div className='min-w-48 lg:w-3/4'>Purchase Price: {purchasePrice}</div>
-      <div className='min-w-48 lg:w-3/4'>Current Price: {currentPrice}</div>
+      <div className='min-w-48 lg:w-3/4'>
+        Current Price: {currentPrice.toFixed(2)}
+      </div>
+      {console.log(typeof currentPrice)}
       {profitLoss >= 0 ? (
         <div className='min-w-48 lg:w-3/4 text-green-600'>
           Profit/Loss: {profitLoss.toFixed(2)}
