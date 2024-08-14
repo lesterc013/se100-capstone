@@ -4,6 +4,7 @@ import StockList from './components/StockList'
 import { StockListContext } from './components/StockListContext'
 import MainTitle from './components/MainTitle'
 import SubTitle from './components/SubTitle'
+import darkThemeIcon from './assets/dark-theme.svg'
 
 function App() {
   const [stockSymbol, setStockSymbol] = useState('')
@@ -103,10 +104,7 @@ function App() {
         className='absolute top-6 right-6 bg-transparent hover:bg-neutral-500 dark:bg-neutral-500  dark:hover:bg-eggshell rounded-full'
         onClick={() => setDarkMode(!darkMode)}
       >
-        <img
-          src='./src/assets/dark-theme.svg'
-          alt='dark-light-mode-selector'
-        ></img>
+        <img src={darkThemeIcon} alt='dark-light-mode-selector'></img>
       </button>
     </div>
   )
