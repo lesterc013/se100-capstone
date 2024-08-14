@@ -4,7 +4,7 @@ import StockList from './components/StockList'
 import { StockListContext } from './components/StockListContext'
 import MainTitle from './components/MainTitle'
 import SubTitle from './components/SubTitle'
-import darkThemeIcon from './assets/dark-theme.svg'
+import DarkThemeSelector from './components/DarkThemeSelector'
 
 function App() {
   const [stockSymbol, setStockSymbol] = useState('')
@@ -72,6 +72,11 @@ function App() {
     setPurchasePrice('')
   }
 
+  // handleDarkMode
+  const handleDarkMode = () => {
+    setDarkMode(!darkMode)
+  }
+
   return (
     <div className={darkMode ? 'dark' : ''}>
       <div className='h-screen bg-eggshell dark:bg-neutral-900'>
@@ -100,12 +105,7 @@ function App() {
           )}
         </div>
       </div>
-      <button
-        className='absolute top-6 right-6 bg-transparent hover:bg-neutral-500 dark:bg-neutral-500  dark:hover:bg-eggshell rounded-full'
-        onClick={() => setDarkMode(!darkMode)}
-      >
-        <img src={darkThemeIcon} alt='dark-light-mode-selector'></img>
-      </button>
+      <DarkThemeSelector handleDarkMode={handleDarkMode} />
     </div>
   )
 }
