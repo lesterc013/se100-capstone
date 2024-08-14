@@ -59,6 +59,7 @@ const StockForm = props => {
           id='purchasePrice'
           value={purchasePrice}
           type='number'
+          step={0.01}
           onChange={event => setPurchasePrice(event.target.value)}
           placeholder='Purchase Price'
           autoComplete='off'
