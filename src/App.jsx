@@ -17,7 +17,7 @@ function App() {
   const getCurrentPrice = useCallback(async stockSymbol => {
     try {
       const url = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${stockSymbol}&apikey=${
-        import.meta.env.VITE_API_KEY_DEMO
+        import.meta.env.VITE_API_KEY
       }`
       const response = await fetch(url)
       const jsonResponse = await response.json()
