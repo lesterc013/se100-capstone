@@ -100,10 +100,13 @@ function AppTest() {
         </div>
       </div>
       <button
-        className='absolute w-12 h-12 top-6 right-6 bg-neutral-500 dark:bg-neutral-500 text-neutral-300 dark:text-neutral-300 hover:bg-neutral-900 dark:hover:bg-eggshell border border-neutral-500 rounded-full'
+        className='absolute top-6 right-6 bg-transparent hover:bg-neutral-500 dark:bg-neutral-500  dark:hover:bg-eggshell rounded-full'
         onClick={() => setDarkMode(!darkMode)}
       >
-        {darkMode ? 'LHT' : 'DRK'}
+        <img
+          src='./src/assets/dark-theme.svg'
+          alt='dark-light-mode-selector'
+        ></img>
       </button>
     </div>
   )

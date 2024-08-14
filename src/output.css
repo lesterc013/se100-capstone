@@ -885,6 +885,10 @@ video {
   background-color: rgb(115 115 115 / var(--tw-bg-opacity));
 }
 
+.dark\:bg-transparent:is(.dark *){
+  background-color: transparent;
+}
+
 .dark\:text-neutral-300:is(.dark *){
   --tw-text-opacity: 1;
   color: rgb(212 212 212 / var(--tw-text-opacity));
