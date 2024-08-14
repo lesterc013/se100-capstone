@@ -16,7 +16,7 @@ const StockForm = props => {
     >
       <div className='relative flex justify-center w-8/12 h-10 my-4 max-w-64'>
         <input
-          className='peer border-b border-neutral-500 placeholder-transparent focus:outline-none'
+          className='peer border-b border-neutral-500 placeholder-transparent focus:outline-none bg-transparent'
           name='stockSymbol'
           id='stockSymbol'
           value={stockSymbol}
@@ -35,7 +35,7 @@ const StockForm = props => {
 
       <div className='relative flex justify-center w-8/12 h-10 my-4 max-w-64'>
         <input
-          className='peer border-b border-neutral-500 placeholder-transparent focus:outline-none'
+          className='peer border-b border-neutral-500 placeholder-transparent focus:outline-none  bg-transparent'
           name='quantity'
           id='quantity'
           value={quantity}
@@ -54,7 +54,7 @@ const StockForm = props => {
 
       <div className='relative flex justify-center w-8/12 h-10 my-4 max-w-64'>
         <input
-          className='peer border-b border-neutral-500 placeholder-transparent focus:outline-none'
+          className='peer border-b border-neutral-500 placeholder-transparent focus:outline-none  bg-transparent'
           name='purchasePrice'
           id='purchasePrice'
           value={purchasePrice}

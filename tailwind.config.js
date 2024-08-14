@@ -6,6 +6,9 @@ export default {
       fontFamily: {
         rubik: ['Rubik', 'sans-serif'],
       },
+      colors: {
+        eggshell: '#fffaf0',
+      },
     },
   },
   plugins: [],

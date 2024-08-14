@@ -71,8 +71,8 @@ function AppTest() {
   }
 
   return (
-    <div className='h-screen'>
-      <div className='flex flex-col mt-28 h-fit justify-start lg:items-start'>
+    <div className='h-screen bg-eggshell'>
+      <div className='flex flex-col pt-28 h-fit justify-start lg:items-start'>
         <MainTitle />
         <StockForm
           handleSubmit={handleSubmit}
