@@ -11,9 +11,15 @@ const Stock = ({ stockRecord }) => {
       <div className='min-w-48 lg:w-3/4'>Quantity: {quantity}</div>
       <div className='min-w-48 lg:w-3/4'>Purchase Price: {purchasePrice}</div>
       <div className='min-w-48 lg:w-3/4'>Current Price: {currentPrice}</div>
-      <div className='min-w-48 lg:w-3/4'>
-        Profit/Loss: {profitLoss.toFixed(2)}
-      </div>
+      {profitLoss >= 0 ? (
+        <div className='min-w-48 lg:w-3/4 text-green-600'>
+          Profit/Loss: {profitLoss.toFixed(2)}
+        </div>
+      ) : (
+        <div className='min-w-48 lg:w-3/4 text-red-600'>
+          Profit/Loss: {profitLoss.toFixed(2)}
+        </div>
+      )}
     </div>
   )
 }
