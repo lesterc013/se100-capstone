@@ -11,6 +11,7 @@ function AppTest() {
   const [purchasePrice, setPurchasePrice] = useState('')
   const [stockList, setStockList] = useState([]) // To track each record entered by a user
   const [stockSymbolList, setStockSymbolList] = useState([]) // For triggering useEffect
+  const [darkMode, setDarkMode] = useState(false)
 
   // API call: useCallback with empty array - means it will only be created on first render and then memoized to prevent recreation when component re-renders -- optimization
   const getCurrentPrice = useCallback(async stockSymbol => {
@@ -71,29 +72,39 @@ function AppTest() {
   }
 
   return (
-    <div className='h-screen bg-eggshell'>
-      <div className='flex flex-col pt-28 h-fit justify-start lg:items-start'>
-        <MainTitle />
-        <StockForm
-          handleSubmit={handleSubmit}
-          stockSymbol={stockSymbol}
-          quantity={quantity}
-          purchasePrice={purchasePrice}
-          setStockSymbol={setStockSymbol}
-          setQuantity={setQuantity}
-          setPurchasePrice={setPurchasePrice}
-        />
-        <SubTitle />
-        {stockList.length === 0 ? (
-          <div className='flex flex-col items-center lg:w-full lg:justify-center'>
-            <p className='lg:min-w-48 lg:w-3/4'>No stocks added</p>
-          </div>
-        ) : (
-          <StockListContext.Provider value={stockList}>
-            <StockList />
-          </StockListContext.Provider>
-        )}
+    <div className={darkMode ? 'dark' : ''}>
+      <div className='h-screen bg-eggshell dark:bg-neutral-900'>
+        <div className='flex flex-col pt-28 h-fit justify-start lg:items-start'>
+          <MainTitle />
+          <StockForm
+            handleSubmit={handleSubmit}
+            stockSymbol={stockSymbol}
+            quantity={quantity}
+            purchasePrice={purchasePrice}
+            setStockSymbol={setStockSymbol}
+            setQuantity={setQuantity}
+            setPurchasePrice={setPurchasePrice}
+          />
+          <SubTitle />
+          {stockList.length === 0 ? (
+            <div className='flex flex-col items-center lg:w-full lg:justify-center'>
+              <p className='lg:min-w-48 lg:w-3/4 dark:text-neutral-300'>
+                No stocks added
+              </p>
+            </div>
+          ) : (
+            <StockListContext.Provider value={stockList}>
+              <StockList />
+            </StockListContext.Provider>
+          )}
+        </div>
       </div>
+      <button
+        className='absolute w-12 h-12 top-6 right-6 bg-neutral-500 dark:bg-neutral-500 text-neutral-300 dark:text-neutral-300 hover:bg-neutral-900 dark:hover:bg-eggshell border border-neutral-500 rounded-full'
+        onClick={() => setDarkMode(!darkMode)}
+      >
+        {darkMode ? 'LHT' : 'DRK'}
+      </button>
     </div>
   )
 }
